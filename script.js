@@ -4,12 +4,13 @@ const cardsImages = [];
 class Table {
     constructor(numberOfCards) {
         this.numberOfCards = numberOfCards;
+        this.openedCards = 0;
         this.clear();
     }
 
     clear() {
-        this.currentCard = '';
-        this.previousCard = '';
+        this.firstCard = undefined;
+        this.secondCard = undefined;
     }
 
     defineRowsCols(numberOfCells) {
@@ -69,19 +70,46 @@ class Table {
     }
 
     flipCard(card) {
-        card.classList.toggle('active');
+        if(card.classList.contains('active')) return;
+        card.classList.add('active');
+
+        if(!this.firstCard) {
+            this.firstCard = card;
+        }
+        else {
+            this.secondCard = card;
+            this.compareCards(this.firstCard, this.secondCard);
+        }
+        
     }
 
     compareCards(firstCard, secondCard) {
+        let firstBg = firstCard.querySelector('.card__back').style.backgroundImage;
+        let secondBg = secondCard.querySelector('.card__back').style.backgroundImage;
 
+        if(firstBg == secondBg) {
+            this.openedCards += 2;
+            this.checkGameover();
+        }
+        else {
+            firstCard.classList.remove('active');
+            secondCard.classList.remove('active');
+        }
+
+        this.clear();
     }
 
     checkGameover() {
+        if(!(this.openedCards === this.numberOfCards)) {
+            return false;
+        }
 
+        alert("You win!");
+        return true;
     }
 }
 
-const table = new Table(9);
+const table = new Table(16);
 
 const cards = table.createTable();
 
