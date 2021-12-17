@@ -1,5 +1,5 @@
 const containerEl = document.getElementById('container');
-const cardsImages = [];
+const cardsImages = ['camera', 'cameraTape', 'cameraVideo', 'cassete', 'minus', 'pcVideo', 'play', 'plus'];
 
 class Table {
     constructor(numberOfCards) {
@@ -69,6 +69,22 @@ class Table {
         return cards;
     }
 
+    getImageUrl(image) {
+        return `url(img/${image}.png)`
+    }
+
+    addImages() {
+        let copyCards = cards;
+        cardsImages.forEach(image => {
+            for (let index = 0; index < 2; index++) {
+                let randomCard = copyCards[Math.floor(Math.random() * copyCards.length)];
+                copyCards = copyCards.filter(function(e) { return e !== randomCard })
+                randomCard.querySelector('.card__back').style.backgroundImage = this.getImageUrl(image);
+            }
+        });
+
+    }
+
     flipCard(card) {
         if(card.classList.contains('active')) return;
         card.classList.add('active');
@@ -92,8 +108,10 @@ class Table {
             this.checkGameover();
         }
         else {
-            firstCard.classList.remove('active');
-            secondCard.classList.remove('active');
+            setTimeout(() => {
+                firstCard.classList.remove('active');
+                secondCard.classList.remove('active');
+            }, 1000);
         }
 
         this.clear();
@@ -112,6 +130,8 @@ class Table {
 const table = new Table(16);
 
 const cards = table.createTable();
+
+table.addImages();
 
 cards.forEach(card => {
     card.addEventListener('click', () => {

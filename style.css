@@ -73,6 +73,7 @@ body {
 	text-align: center;
 	transition: transform 0.7s;
 	transform-style: preserve-3d;
+
   }
   
   /* Do an horizontal flip when you move the mouse over the flip box container */
@@ -87,6 +88,7 @@ body {
 	height: 100%;
 	-webkit-backface-visibility: hidden; /* Safari */
 	backface-visibility: hidden;
+	border-radius: 1rem;
   }
   
   /* Style the front side (fallback if image is missing) */
