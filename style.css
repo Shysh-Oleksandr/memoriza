@@ -37,8 +37,8 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
 
 body {
 	font-family: "Josefin Slab", serif;
-	background-color: rgb(245, 243, 224);
-	color: #444;
+	background-color: #f5f3e0;
+	color: #9192a5;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -48,14 +48,16 @@ body {
 
 .title {
 	font-size: 4rem;
-	margin: 4rem 0;
+	margin: 2rem 0;
+	font-weight: 600;
 }
 
 .container {
 	max-width: 1000px;
 }
-.table {
-	border-spacing: 2px;
+
+table {
+	border-spacing: 8px;
 }
 
 .table__col {
@@ -88,13 +90,14 @@ body {
 	height: 100%;
 	-webkit-backface-visibility: hidden; /* Safari */
 	backface-visibility: hidden;
-	border-radius: 1rem;
+	border-radius: 0.7rem;
+	border: 2px solid #E0F5F3; /* #F3E0F5 #E0E2F5(complementary) */
   }
   
   /* Style the front side (fallback if image is missing) */
   .card__front {
 	color: black;
-	background-image: url(img/cardBg.webp);
+	background-image: url(img/cardBg.jfif);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -102,9 +105,28 @@ body {
   
   /* Style the back side */
   .card__back {
+	background-color: #fff;
 	background-image: url(img/backBg.jpg);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
 	transform: rotateY(180deg);
+  }
+
+  .replay-btn {
+	  width: 100%;
+	  border-radius: 10px;
+	  font-size: 2rem;
+	  padding: 0.5rem 1rem;
+	  text-align: center;
+	  margin: 2rem auto;
+	  color: #444;
+	  font-weight: 600;
+	  background-color: #9192a5;
+	  transition: all 0.3s ease;
+	  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .replay-btn:hover {
+	  background-color: #87889b;
   }

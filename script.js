@@ -1,10 +1,13 @@
 const containerEl = document.getElementById('container');
-const cardsImages = ['camera', 'cameraTape', 'cameraVideo', 'cassete', 'minus', 'pcVideo', 'play', 'plus'];
+const cardsImages = ['candle', 'candy-cane', 'packard-bell', 'chimney', 'christmas-ball', 'christmas-lights', 'christmas-tree', 'christmas-card'];
 
 class Table {
     constructor(numberOfCards) {
+        if (numberOfCards % 2 != 0) numberOfCards++;
         this.numberOfCards = numberOfCards;
         this.openedCards = 0;
+        this.canFlip = true;
+        this.moves = 0;
         this.clear();
     }
 
@@ -14,6 +17,13 @@ class Table {
     }
 
     defineRowsCols(numberOfCells) {
+        let rootNumber = Math.sqrt(numberOfCells);
+        if (rootNumber % 1 === 0) {
+            this.cols = rootNumber;
+            this.rows = rootNumber;
+            return;
+        }
+
         if (numberOfCells % 6 === 0) {
             this.cols = 6;
             this.rows = numberOfCells / this.cols;
@@ -31,8 +41,8 @@ class Table {
             this.rows = numberOfCells / this.cols;
         }
         else {
-            this.cols = (numberOfCells>20) ? 10 : 7;
-            this.rows = numberOfCells / this.cols;
+            this.cols = (numberOfCells > 20) ? 10 : 7;
+            this.rows = Math.floor(numberOfCells / this.cols);
         }
     }
 
@@ -70,47 +80,57 @@ class Table {
     }
 
     getImageUrl(image) {
-        return `url(img/${image}.png)`
+        return `url(img/${image}.webp)`
+    }
+
+    shuffle(arr) {
+        return arr.map(i => [Math.random(), i]).sort().map(i => i[1]);
     }
 
     addImages() {
+        let shuffledCardsImages = this.shuffle(cardsImages);
         let copyCards = cards;
-        cardsImages.forEach(image => {
+        for (let image = 0; image < this.numberOfCards / 2; image++) {
+            const cardImage = shuffledCardsImages[image];
             for (let index = 0; index < 2; index++) {
                 let randomCard = copyCards[Math.floor(Math.random() * copyCards.length)];
-                copyCards = copyCards.filter(function(e) { return e !== randomCard })
-                randomCard.querySelector('.card__back').style.backgroundImage = this.getImageUrl(image);
+                copyCards = copyCards.filter(function (e) { return e !== randomCard })
+                randomCard.querySelector('.card__back').style.backgroundImage = this.getImageUrl(cardImage);
             }
-        });
 
+        }
     }
 
     flipCard(card) {
-        if(card.classList.contains('active')) return;
+        if (card.classList.contains('active')) return;
         card.classList.add('active');
 
-        if(!this.firstCard) {
+        if (!this.firstCard) {
             this.firstCard = card;
         }
         else {
             this.secondCard = card;
+            this.moves++;
             this.compareCards(this.firstCard, this.secondCard);
         }
-        
+
     }
 
     compareCards(firstCard, secondCard) {
         let firstBg = firstCard.querySelector('.card__back').style.backgroundImage;
         let secondBg = secondCard.querySelector('.card__back').style.backgroundImage;
 
-        if(firstBg == secondBg) {
+        if (firstBg == secondBg) {
             this.openedCards += 2;
             this.checkGameover();
         }
         else {
+            this.canFlip = false;
             setTimeout(() => {
                 firstCard.classList.remove('active');
                 secondCard.classList.remove('active');
+
+                this.canFlip = true;
             }, 1000);
         }
 
@@ -118,11 +138,16 @@ class Table {
     }
 
     checkGameover() {
-        if(!(this.openedCards === this.numberOfCards)) {
+        if (!(this.openedCards === this.numberOfCards)) {
             return false;
         }
 
-        alert("You win!");
+        setTimeout(() => {
+            let replayBtn = document.createElement('div');
+            replayBtn.innerHTML = `<button class="replay-btn" onclick="location.reload()">Replay</button>`;
+            containerEl.appendChild(replayBtn);
+        }, 500);
+
         return true;
     }
 }
@@ -135,6 +160,8 @@ table.addImages();
 
 cards.forEach(card => {
     card.addEventListener('click', () => {
-        table.flipCard(card);
+        if (table.canFlip) {
+            table.flipCard(card);
+        }
     })
 })
