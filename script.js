@@ -5,6 +5,8 @@ const minutesLabel = document.getElementById("minutes");
 const secondsLabel = document.getElementById("seconds");
 const gameInfoEl = document.getElementById("game-info");
 
+const levelBtns = document.querySelectorAll('.level-btn');
+
 const cardsImages = ['candle', 'candy-cane', 'packard-bell', 'chimney', 'christmas-ball', 'christmas-lights', 'christmas-tree', 'christmas-card'];
 
 var totalSeconds = 0;
