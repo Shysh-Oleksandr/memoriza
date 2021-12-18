@@ -132,6 +132,7 @@ body {
 .game-stat {
 	flex: 1 1 33.3333%;
 	font-size: 1.3rem;
+	letter-spacing: 0.1rem;
 }
 
 .difficulty {
@@ -144,6 +145,7 @@ body {
 
 .timer {
 	text-align: right;
+	letter-spacing: 2px;
 }
 
 .levels {
@@ -270,8 +272,10 @@ table {
 	transform: rotateY(180deg);
 }
 
-.replay-btn {
-	width: 100%;
+.replay-btn,
+.menu-btn,
+.next-btn {
+	flex: 1 1 100%;
 	border-radius: 10px;
 	font-size: 2rem;
 	padding: 0.5rem 1rem;
@@ -284,6 +288,12 @@ table {
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.replay-btn:hover {
+.replay-btn:hover,
+.menu-btn:hover,
+.next-btn:hover {
 	background-color: #87889b;
+}
+
+.btns-container {
+	display: flex;
 }

@@ -12,20 +12,20 @@ const cardsImages = ['candle', 'candy-cane', 'packard-bell', 'chimney', 'christm
 
 var totalSeconds = 0;
 
-var table, cards, tbl;
+var table, cards, tbl, currentLevel;
 
 var cardsForLevels = [
     {
         "level": 1,
-        "numberOfCards": 8
+        "numberOfCards": 4
     },
     {
         "level": 2,
-        "numberOfCards": 12
+        "numberOfCards": 6
     },
     {
         "level": 3,
-        "numberOfCards": 16
+        "numberOfCards": 8
     },
     {
         "level": 4,
@@ -37,19 +37,20 @@ var cardsForLevels = [
     },
     {
         "level": 6,
-        "numberOfCards": 54
+        "numberOfCards": 4
     },
     {
         "level": 7,
-        "numberOfCards": 64
+        "numberOfCards": 6
     }
-]
+];
+
+var levelsNumber = cardsForLevels.length;
 
 levelBtns.forEach(levelBtn => {
     levelBtn.addEventListener('click', () => {
         let levelNumber = levelBtn.querySelector('.level-number').innerText;
         const numberOfCards = getNumberOfCards(levelNumber);
-        console.log(numberOfCards);
         loadGame(numberOfCards, levelNumber);
     })
 });
@@ -57,11 +58,21 @@ levelBtns.forEach(levelBtn => {
 function getNumberOfCards(level) {
     let numberOfCards;
     cardsForLevels.forEach(element => {
-        if(element.level == level) {
-            numberOfCards = element.numberOfCards; 
+        if (element.level == level) {
+            numberOfCards = element.numberOfCards;
         }
     });
     return numberOfCards;
+}
+
+function getNextLevel() {
+    if (currentLevel > levelsNumber) {
+        return currentLevel;
+    }
+    else {
+        let nextLevel = parseInt(currentLevel) + 1;
+        return nextLevel;
+    }
 }
 
 // Set card's height equel to width.
@@ -92,7 +103,7 @@ function pad(val) {
 // /Timer functions
 
 function clearTable() {
-    if(tbl) {
+    if (tbl) {
         tbl.remove();
     }
     table = null;
@@ -148,7 +159,6 @@ class Table {
     }
 
     createTable(numberOfCards) {
-        // Todo: delete previous table.
         let cards = [];
 
         this.defineRowsCols(numberOfCards);
@@ -176,10 +186,13 @@ class Table {
         }
 
         tbl.appendChild(tblBody);
+        containerEl.innerHTML = '';
         containerEl.appendChild(tbl);
 
         // Start timer.
         totalSeconds = 0;
+        secondsLabel.innerHTML = pad(totalSeconds % 60);
+        minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
         this.timerInterval = setInterval(setTime, 1000);
 
         return cards;
@@ -246,19 +259,49 @@ class Table {
     }
 
     checkGameover() {
-        if (!(this.openedCards == this.numberOfCards)) {
+        if (this.openedCards != this.numberOfCards) {
             return false;
         }
 
         clearInterval(this.timerInterval);
 
         setTimeout(() => {
-            let replayBtn = document.createElement('div');
-            replayBtn.innerHTML = `<button class="replay-btn" onclick="location.reload()">Replay</button>`;
-            containerEl.appendChild(replayBtn);
+            // Container for buttons.
+            let btnsContainer = document.createElement('div');
+            btnsContainer.classList.add("btns-container");
 
-            // Todo: create next button. 
-            // loadGame(this.numberOfCards, 3);
+            // Back to menu button.
+            let menuBtn = document.createElement('button');
+            menuBtn.classList.add('menu-btn');
+            menuBtn.innerText = 'Back to menu';
+            menuBtn.addEventListener('click', () => {
+                containerEl.innerHTML = '';
+                toggleMenuGame();
+            });
+            btnsContainer.appendChild(menuBtn);
+
+            // Replay button
+            let replayBtn = document.createElement('button');
+            replayBtn.classList.add('replay-btn');
+            replayBtn.innerText = 'Replay';
+            replayBtn.addEventListener('click', () => {
+                loadGame(getNumberOfCards(currentLevel), currentLevel);
+            });
+            btnsContainer.appendChild(replayBtn);
+
+            // Next level button.
+            if(currentLevel != levelsNumber) {
+                let nextLevelBtn = document.createElement('button');
+                nextLevelBtn.classList.add('next-btn');
+                nextLevelBtn.innerText = 'Next';
+                nextLevelBtn.addEventListener('click', () => {
+                    loadGame(getNumberOfCards(getNextLevel()), getNextLevel());
+                });
+
+                btnsContainer.appendChild(nextLevelBtn);
+            }
+
+            containerEl.appendChild(btnsContainer);
         }, 500);
 
         return true;
@@ -267,8 +310,15 @@ class Table {
     // /Mechanics
 }
 
+function toggleMenuGame() {
+    gameInfoEl.classList.toggle('active');
+    levelsEl.classList.toggle('active');
+}
+
 function loadGame(numberOfCards, levelNumber) {
     clearTable();
+
+    currentLevel = levelNumber;
 
     difficultyEl.innerText = `Level ${levelNumber}`;
     gameInfoEl.classList.add('active');
