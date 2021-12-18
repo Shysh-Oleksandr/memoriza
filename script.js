@@ -1,6 +1,33 @@
 const containerEl = document.getElementById('container');
+const difficultyEl = document.getElementById('difficulty');
+const movesEl = document.getElementById('moves');
+const minutesLabel = document.getElementById("minutes");
+const secondsLabel = document.getElementById("seconds");
+const gameInfoEl = document.getElementById("game-info");
+
 const cardsImages = ['candle', 'candy-cane', 'packard-bell', 'chimney', 'christmas-ball', 'christmas-lights', 'christmas-tree', 'christmas-card'];
 
+var totalSeconds = 0;
+
+function setTime() {
+    ++totalSeconds;
+    secondsLabel.innerHTML = pad(totalSeconds % 60);
+    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+}
+
+function pad(val) {
+    var valString = val + "";
+    if (valString.length < 2) {
+        return "0" + valString;
+    } else {
+        return valString;
+    }
+}
+
+
+// Todo: add new image arrays for each theme.
+// Todo: make theme selecting tabs.
+// Todo: make difficulty level selection window, after selection load createTable(numberOfCards).
 class Table {
     constructor(numberOfCards) {
         if (numberOfCards % 2 != 0) numberOfCards++;
@@ -46,10 +73,11 @@ class Table {
         }
     }
 
-    createTable() {
+    createTable(numberOfCards) {
+        // Todo: delete previous table.
         let cards = [];
 
-        this.defineRowsCols(this.numberOfCards);
+        this.defineRowsCols(numberOfCards);
 
         var tbl = document.createElement("table");
         var tblBody = document.createElement("tbody");
@@ -76,6 +104,10 @@ class Table {
         tbl.appendChild(tblBody);
         containerEl.appendChild(tbl);
 
+        // Start timer.
+        totalSeconds = 0;
+        this.timerInterval = setInterval(setTime, 1000);
+
         return cards;
     }
 
@@ -87,7 +119,7 @@ class Table {
         return arr.map(i => [Math.random(), i]).sort().map(i => i[1]);
     }
 
-    addImages() {
+    addImages(cards) {
         let shuffledCardsImages = this.shuffle(cardsImages);
         let copyCards = cards;
         for (let image = 0; image < this.numberOfCards / 2; image++) {
@@ -111,6 +143,7 @@ class Table {
         else {
             this.secondCard = card;
             this.moves++;
+            movesEl.innerText = `Moves: ${this.moves}`;
             this.compareCards(this.firstCard, this.secondCard);
         }
 
@@ -142,26 +175,38 @@ class Table {
             return false;
         }
 
+        clearInterval(this.timerInterval);
+
         setTimeout(() => {
             let replayBtn = document.createElement('div');
             replayBtn.innerHTML = `<button class="replay-btn" onclick="location.reload()">Replay</button>`;
             containerEl.appendChild(replayBtn);
+
+            // Todo: create next button. 
         }, 500);
 
         return true;
     }
 }
 
-const table = new Table(16);
+function startGame() {
+    gameInfoEl.classList.add('active');
 
-const cards = table.createTable();
+    const table = new Table(8);
 
-table.addImages();
+    const cards = table.createTable(table.numberOfCards);
 
-cards.forEach(card => {
-    card.addEventListener('click', () => {
-        if (table.canFlip) {
-            table.flipCard(card);
-        }
+    // Adding images to cards.
+    table.addImages(cards);
+
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            if (table.canFlip) {
+                table.flipCard(card);
+            }
+        })
     })
-})
+}
+
+
+// startGame();

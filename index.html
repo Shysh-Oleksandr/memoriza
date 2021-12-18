@@ -14,10 +14,34 @@
 </head>
 
 <body>
-    <h1 class="title">Memoriza</h1>
+    <div class="start-content">
+        <div class="header">
+            <h1 class="title">Memoriza</h1>
+            <h2 class="suptitle">Memory game</h2>
+        </div>
+        <div class="levels">
+            <div class="level-btn" id="level-btn">
+                <div class="level-number">1</div>
+                <div class="level-cards"><span class="cards-number">16</span> cards</div>
+                <span class="play-btn"><i class="fas fa-play"></i></span>
+            </div>
+            <div class="level-btn" id="level-btn">
+                <div class="level-number">2</div>
+                <div class="level-cards"><span class="cards-number">24</span> cards</div>
+                <span class="play-btn"><i class="fas fa-play"></i></span>
+            </div>
+        </div>
+    </div>
 
-    <div class="container" id="container">
-        
+    <div class="game-content">
+        <div class="game-info" id="game-info">
+            <h3 class="difficulty game-stat" id="difficulty">Level 2</h3>
+            <h3 class="moves game-stat" id="moves">Moves: 0</h3>
+            <h3 class="timer game-stat"><span id="minutes">00</span>:<span id="seconds">00</span></h3>
+        </div>
+        <div class="container" id="container">
+
+        </div>
     </div>
 </body>
 
