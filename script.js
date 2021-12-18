@@ -4,6 +4,7 @@ const movesEl = document.getElementById('moves');
 const minutesLabel = document.getElementById("minutes");
 const secondsLabel = document.getElementById("seconds");
 const gameInfoEl = document.getElementById("game-info");
+const levelsEl = document.getElementById("levels");
 
 const levelBtns = document.querySelectorAll('.level-btn');
 
@@ -11,6 +12,69 @@ const cardsImages = ['candle', 'candy-cane', 'packard-bell', 'chimney', 'christm
 
 var totalSeconds = 0;
 
+var table, cards, tbl;
+
+var cardsForLevels = [
+    {
+        "level": 1,
+        "numberOfCards": 8
+    },
+    {
+        "level": 2,
+        "numberOfCards": 12
+    },
+    {
+        "level": 3,
+        "numberOfCards": 16
+    },
+    {
+        "level": 4,
+        "numberOfCards": 24
+    },
+    {
+        "level": 5,
+        "numberOfCards": 36
+    },
+    {
+        "level": 6,
+        "numberOfCards": 54
+    },
+    {
+        "level": 7,
+        "numberOfCards": 64
+    }
+]
+
+levelBtns.forEach(levelBtn => {
+    levelBtn.addEventListener('click', () => {
+        let levelNumber = levelBtn.querySelector('.level-number').innerText;
+        const numberOfCards = getNumberOfCards(levelNumber);
+        console.log(numberOfCards);
+        loadGame(numberOfCards, levelNumber);
+    })
+});
+
+function getNumberOfCards(level) {
+    let numberOfCards;
+    cardsForLevels.forEach(element => {
+        if(element.level == level) {
+            numberOfCards = element.numberOfCards; 
+        }
+    });
+    return numberOfCards;
+}
+
+// Set card's height equel to width.
+function setCardsSize() {
+    cards.forEach(card => {
+        let cardsStyle = getComputedStyle(card);
+        card.style.height = `${parseInt(cardsStyle.width)}px`;
+    });
+    let tableElStyle = getComputedStyle(tbl);
+    gameInfoEl.style.width = `${parseInt(tableElStyle.width)}px`;
+}
+
+// Timer functions
 function setTime() {
     ++totalSeconds;
     secondsLabel.innerHTML = pad(totalSeconds % 60);
@@ -25,11 +89,18 @@ function pad(val) {
         return valString;
     }
 }
+// /Timer functions
 
+function clearTable() {
+    if(tbl) {
+        tbl.remove();
+    }
+    table = null;
+    cards = [];
+}
 
 // Todo: add new image arrays for each theme.
 // Todo: make theme selecting tabs.
-// Todo: make difficulty level selection window, after selection load createTable(numberOfCards).
 class Table {
     constructor(numberOfCards) {
         if (numberOfCards % 2 != 0) numberOfCards++;
@@ -45,6 +116,7 @@ class Table {
         this.secondCard = undefined;
     }
 
+    // Table creation.
     defineRowsCols(numberOfCells) {
         let rootNumber = Math.sqrt(numberOfCells);
         if (rootNumber % 1 === 0) {
@@ -81,7 +153,7 @@ class Table {
 
         this.defineRowsCols(numberOfCards);
 
-        var tbl = document.createElement("table");
+        tbl = document.createElement("table");
         var tblBody = document.createElement("tbody");
 
         for (var i = 0; i < this.rows; i++) {
@@ -131,10 +203,11 @@ class Table {
                 copyCards = copyCards.filter(function (e) { return e !== randomCard })
                 randomCard.querySelector('.card__back').style.backgroundImage = this.getImageUrl(cardImage);
             }
-
         }
     }
+    // /Table creation.
 
+    // Mechanics
     flipCard(card) {
         if (card.classList.contains('active')) return;
         card.classList.add('active');
@@ -173,7 +246,7 @@ class Table {
     }
 
     checkGameover() {
-        if (!(this.openedCards === this.numberOfCards)) {
+        if (!(this.openedCards == this.numberOfCards)) {
             return false;
         }
 
@@ -185,21 +258,32 @@ class Table {
             containerEl.appendChild(replayBtn);
 
             // Todo: create next button. 
+            // loadGame(this.numberOfCards, 3);
         }, 500);
 
         return true;
     }
+
+    // /Mechanics
 }
 
-function startGame() {
+function loadGame(numberOfCards, levelNumber) {
+    clearTable();
+
+    difficultyEl.innerText = `Level ${levelNumber}`;
     gameInfoEl.classList.add('active');
+    levelsEl.classList.remove('active');
 
-    const table = new Table(8);
+    table = new Table(numberOfCards);
 
-    const cards = table.createTable(table.numberOfCards);
+    movesEl.innerText = `Moves: ${table.moves}`;
+
+    cards = table.createTable(table.numberOfCards);
 
     // Adding images to cards.
     table.addImages(cards);
+
+    setCardsSize();
 
     cards.forEach(card => {
         card.addEventListener('click', () => {
@@ -207,8 +291,7 @@ function startGame() {
                 table.flipCard(card);
             }
         })
-    })
+    });
+
+    window.addEventListener('resize', setCardsSize);
 }
-
-
-// startGame();
