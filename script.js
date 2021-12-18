@@ -8,11 +8,15 @@ const levelsEl = document.getElementById("levels");
 
 const levelBtns = document.querySelectorAll('.level-btn');
 
-const cardsImages = ['candle', 'candy-cane', 'packard-bell', 'chimney', 'christmas-ball', 'christmas-lights', 'christmas-tree', 'christmas-card'];
+const cardsImages = ['candle', 'candy-cane', 'packard-bell', 'chimney', 'christmas-ball', 'christmas-lights', 'christmas-tree', 'christmas-card', 'christmas-present', 'christmas-wreath', 'church', 'cocoa', 'cookie', 'elf', 'fireworks', 'fruit-cake', 'gingerbread-man', 'hat', 'holly', 'knitting', 'mulled-wine', 'nutcracker', 'reindeer', 'roast-chicken', 'santa-claus', 'sleigh', 'snowflake', 'snow-globe', 'snowman', 'star', 'stocking', 'christmas-ornament'];
 
 var totalSeconds = 0;
 
 var table, cards, tbl, currentLevel;
+
+// Container for buttons.
+let btnsContainer = document.createElement('div');
+btnsContainer.classList.add("btns-container");
 
 var cardsForLevels = [
     {
@@ -37,11 +41,11 @@ var cardsForLevels = [
     },
     {
         "level": 6,
-        "numberOfCards": 4
+        "numberOfCards": 54
     },
     {
         "level": 7,
-        "numberOfCards": 6
+        "numberOfCards": 64
     }
 ];
 
@@ -119,6 +123,7 @@ class Table {
         this.openedCards = 0;
         this.canFlip = true;
         this.moves = 0;
+        this.timerInterval = null;
         this.clear();
     }
 
@@ -186,13 +191,40 @@ class Table {
         }
 
         tbl.appendChild(tblBody);
+
         containerEl.innerHTML = '';
         containerEl.appendChild(tbl);
+        
+        // Create buttons.
+        btnsContainer.innerHTML = '';
+        // Back to menu button.
+        let menuBtn = document.createElement('button');
+        menuBtn.classList.add('menu-btn');
+        menuBtn.innerText = 'Back to menu';
+        menuBtn.addEventListener('click', () => {
+            containerEl.innerHTML = '';
+            clearInterval(this.timerInterval);
+            toggleMenuGame();
+        });
+        btnsContainer.appendChild(menuBtn);
+
+        // Replay button
+        let replayBtn = document.createElement('button');
+        replayBtn.classList.add('replay-btn');
+        replayBtn.innerText = 'Replay';
+        replayBtn.addEventListener('click', () => {
+            clearInterval(this.timerInterval);
+            loadGame(getNumberOfCards(currentLevel), currentLevel);
+        });
+        btnsContainer.appendChild(replayBtn);
+
+        containerEl.appendChild(btnsContainer);
 
         // Start timer.
         totalSeconds = 0;
         secondsLabel.innerHTML = pad(totalSeconds % 60);
         minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+        
         this.timerInterval = setInterval(setTime, 1000);
 
         return cards;
@@ -266,31 +298,8 @@ class Table {
         clearInterval(this.timerInterval);
 
         setTimeout(() => {
-            // Container for buttons.
-            let btnsContainer = document.createElement('div');
-            btnsContainer.classList.add("btns-container");
-
-            // Back to menu button.
-            let menuBtn = document.createElement('button');
-            menuBtn.classList.add('menu-btn');
-            menuBtn.innerText = 'Back to menu';
-            menuBtn.addEventListener('click', () => {
-                containerEl.innerHTML = '';
-                toggleMenuGame();
-            });
-            btnsContainer.appendChild(menuBtn);
-
-            // Replay button
-            let replayBtn = document.createElement('button');
-            replayBtn.classList.add('replay-btn');
-            replayBtn.innerText = 'Replay';
-            replayBtn.addEventListener('click', () => {
-                loadGame(getNumberOfCards(currentLevel), currentLevel);
-            });
-            btnsContainer.appendChild(replayBtn);
-
             // Next level button.
-            if(currentLevel != levelsNumber) {
+            if (currentLevel != levelsNumber) {
                 let nextLevelBtn = document.createElement('button');
                 nextLevelBtn.classList.add('next-btn');
                 nextLevelBtn.innerText = 'Next';
@@ -300,8 +309,6 @@ class Table {
 
                 btnsContainer.appendChild(nextLevelBtn);
             }
-
-            containerEl.appendChild(btnsContainer);
         }, 500);
 
         return true;
