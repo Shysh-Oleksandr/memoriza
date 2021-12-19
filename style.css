@@ -29,7 +29,6 @@ aside {
 
 html,
 body {
-	height: 100%;
 	width: 100%;
 	font-size: 100%;
 	line-height: 1;
@@ -81,8 +80,9 @@ h6 {
 /* Default */
 body {
 	font-family: "Josefin Slab", serif;
-	background-color: #f5f3e0;
-	color: #9192a5;
+	background: rgb(114, 214, 247);
+	background: linear-gradient(162deg, #9fc7f37a 0%, rgb(14 77 191 / 80%) 100%);
+	color: #7c1b15;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -100,6 +100,15 @@ body {
 	margin: 2rem 0 0;
 	font-weight: 600;
 	letter-spacing: 6px;
+}
+
+.christmas-theme .title,
+.christmas-theme .theme-tab__title {
+	background: rgb(100, 16, 14);
+	background: linear-gradient(0deg, rgba(100, 16, 14, 1) 0%, rgba(166, 47, 34, 1) 100%);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
 }
 
 .suptitle {
@@ -185,17 +194,76 @@ body {
 	border-radius: 5px;
 	justify-content: space-between;
 	transition: all 0.2s ease;
-	border-bottom: 4px solid transparent;
+	/* border-bottom: 4px solid transparent; */
+}
+
+.christmas-button,
+.levels-christmas .level-btn {
+	box-sizing: border-box;
+	min-width: 100px;
+	padding: 1.5rem 2rem;
+	font-size: 1.6rem;
+	line-height: 1.6rem;
+	text-decoration: none;
+	color: #fff;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+	outline: none;
+	border-radius: 1rem;
+	border: 1px solid #4c0300;
+	background: #5e0d0c;
+	box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.25), inset 0 0 6px #a23227, inset 0 80px 80px -40px #ac3223,
+		1px 1px 3px rgba(0, 0, 0, 0.75);
+
+	position: relative;
+	overflow: visible; /* IE9 & 10 */
+	-webkit-transition: 500ms linear;
+	-moz-transition: 500ms linear;
+	-o-transition: 500ms linear;
+	transition: 500ms linear;
+}
+
+.christmas-button::before,
+.levels-christmas .level-btn::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: -7px;
+	left: -3px;
+	right: 0;
+	height: 23px;
+	background: url(img/christmas/snow.png) no-repeat 0 0, url(img/christmas/snowMiddle.png) no-repeat 50% 0,
+		url(img/christmas/snowRight.png) no-repeat 100% 0;
+}
+.christmas-button:hover,
+.levels-christmas .level-btn:hover {
+	background: #a61715;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75), 0 0 40px #fff;
+	box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.25), /* highlight */ inset 0 0 6px #da3b2c,
+		/* inner glow */ inset 0 80px 80px -40px #dd4330, /* gradient */ 1px 1px 3px rgba(0, 0, 0, 0.75); /* shadow */
+}
+.christmas-button:focus,
+.levels-christmas .level-btn:focus {
+	outline: none; /*FF*/
+}
+.christmas-button:active,
+.levels-christmas .level-btn:active {
+	box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.25), /* highlight */ inset 0 0 6px #da3b2c,
+		/* inner glow */ inset 0 80px 80px -40px #dd4330, /* gradient */ 0px 1px 0px rgba(255, 255, 255, 0.25); /* shadow */
+
+	-webkit-transition: 50ms linear;
+	-moz-transition: 50ms linear;
+	-o-transition: 50ms linear;
+	transition: 50ms linear;
 }
 
 .level-btn:hover {
-	border-bottom: 4px solid #9192a5;
+	/* border-bottom: 4px solid #9192a5; */
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 .level-btn:hover .play-btn {
-	background-color: #f5f3e0;
-	color: #444;
+	background-color: #5e0d0c;
+	color: #fff;
 }
 
 .level-number {
@@ -219,7 +287,7 @@ body {
 .play-btn {
 	margin: 0 0.7rem;
 	font-size: 1.3rem;
-	color: #fff;
+	color: #5e0d0c;
 	transition: all 0.2s ease;
 	display: flex;
 	align-items: center;
@@ -227,7 +295,7 @@ body {
 	border-radius: 50%;
 	width: 40px;
 	height: 40px;
-	background-color: #444;
+	background-color: #fff;
 	text-align: right;
 }
 
@@ -319,7 +387,6 @@ table {
 	display: none;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0 10px;
 	position: relative;
 }
 
@@ -344,6 +411,7 @@ table {
 
 .tabs li {
 	position: relative;
+	box-shadow: 0px 4px 11px 3px rgb(94 13 12 / 30%);
 	flex: 1 1 33.33333333%;
 	text-align: center;
 	border-top-left-radius: 15px;
@@ -364,97 +432,18 @@ table {
 .tabs li.active,
 .tabs li:hover {
 	z-index: 3;
-	background-color: #444;
-	color: #fff;
+	background-color: #5e0d0c;
+	box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.25), /* highlight */ inset 0 0 6px #a23227,
+		/* inner glow */ inset 0 80px 80px -40px #ac3223, /* gradient */ 1px 1px 3px rgba(0, 0, 0, 0.75),
+		0px 4px 11px 3px rgb(94 13 12 / 30%);
 }
 
-.tabs li:first-child:hover::before,
-.tabs li:last-child:hover::after {
-	background-color: #444;
-}
-
-.tabs li:before,
-.tabs li:after,
-.tabs li a:before,
-.tabs li a:after {
-	position: absolute;
-	bottom: 0;
-}
-
-.tabs li:last-child:after,
-.tabs li:last-child a:after,
-.tabs li:first-child:before,
-.tabs li:first-child a:before,
-.tabs .active:after,
-.tabs .active:before,
-.tabs .active a:after,
-.tabs .active a:before {
-	transition: all 0.3s ease;
-	content: "";
-}
-.tabs .active:before,
-.tabs .active:after {
-	background: #444;
-
-	/* Squares below circles */
-	z-index: 1;
-}
-/* Squares */
-.tabs li:before,
-.tabs li:after {
-	background: #fff;
-	width: 10px;
-	height: 10px;
-}
-.tabs li:before {
-	left: -10px;
-}
-.tabs li:after {
-	right: -10px;
-}
-/* Circles */
-.tabs li a:after,
-.tabs li a:before {
-	width: 20px;
-	height: 20px;
-	/* Circles are circular */
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	background: #f5f3e0;
-
-	/* Circles over squares */
-	z-index: 2;
-}
-.tabs .active a:after,
-.tabs .active a:before {
-	background: #fff;
-}
-/* First and last tabs have different
-   outside color needs */
-.tabs li:first-child.active a:before,
-.tabs li:last-child.active a:after {
-	background: #f5f3e0;
-}
-.tabs li a:before {
-	left: -20px;
-}
-.tabs li a:after {
-	right: -20px;
-}
-
-.tabs .active a:after,
-.tabs .active a:before,
-.tabs .active:after,
-.tabs .active:before {
-	display: none;
-}
-
-.tabs li:first-child::before,
-.tabs li:last-child::after,
-.tabs .active:first-child a:before,
-.tabs .active:last-child a:after {
-	display: inline-block;
+.christmas-theme .tabs li.active .theme-tab__title,
+.christmas-theme .tabs li:hover .theme-tab__title {
+	background: rgb(255, 255, 255);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
 }
 
 .tabs li img {
