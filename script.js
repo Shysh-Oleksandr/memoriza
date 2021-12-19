@@ -15,7 +15,7 @@ const levelBtns = document.querySelectorAll('.level-btn');
 
 const christmasImages = ['candle', 'candy-cane', 'packard-bell', 'chimney', 'christmas-ball', 'christmas-lights', 'christmas-tree', 'christmas-card', 'christmas-present', 'christmas-wreath', 'church', 'cocoa', 'cookie', 'elf', 'fireworks', 'fruit-cake', 'gingerbread-man', 'hat', 'holly', 'knitting', 'mulled-wine', 'nutcracker', 'reindeer', 'roast-chicken', 'santa-claus', 'sleigh', 'snowflake', 'snow-globe', 'snowman', 'star', 'stocking', 'christmas-ornament'];
 const halloweenImages = ['bag', 'bat', 'bible', 'bones', 'broom', 'calendar', 'candles', 'candy', 'cat', 'coffin', 'devil', 'dracula', 'eye-ball', 'frankenstein', 'furnace', 'ghost', 'grave', 'grim-reaper', 'haunted-house', 'letter', 'mummy', 'pumkin', 'scythe', 'shirt', 'skull', 'spider', 'spider-web', 'tombstone', 'trick-or-treat_1', 'witch', 'witch-hat_1', 'zombie'];
-const musicImages = ['bag', 'bat', 'bible', 'bones', 'broom', 'calendar', 'candles', 'candy', 'cat', 'coffin', 'devil', 'dracula', 'eye-ball', 'frankenstein', 'furnace', 'ghost', 'grave', 'grim-reaper', 'haunted-house', 'letter', 'mummy', 'pumkin', 'scythe', 'shirt', 'skull', 'spider', 'spider-web', 'tombstone', 'trick-or-treat_1', 'witch', 'witch-hat_1', 'zombie'];
+const musicImages = ['accordion', 'acoustic-guitar', 'bagpipes', 'bass-drum', 'bass-guitar', 'bongo', 'cello', 'chimes', 'clave', 'cowbell', 'cymbal', 'drum-set', 'flute', 'french-horn', 'gong', 'harmonica', 'harp', 'keyboard', 'maracas', 'marimba', 'melodica', 'music', 'musical-note', 'oboe', 'piano', 'saxophone', 'tambourine', 'triangle', 'trombone', 'trumpet', 'violin', 'xylophone'];
 
 var totalSeconds = 0;
 
@@ -83,7 +83,6 @@ tabsBtn.forEach(tab => {
 
         if (!currentBtn.classList.contains('active')) {
             currentThemeIndex = tabsBtnArray.indexOf(tab);
-            console.log(currentThemeIndex);
 
             tabsBtn.forEach(item => {
                 item.classList.remove('active');
