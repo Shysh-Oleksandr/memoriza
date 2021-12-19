@@ -5,6 +5,9 @@ const minutesLabel = document.getElementById("minutes");
 const secondsLabel = document.getElementById("seconds");
 const gameInfoEl = document.getElementById("game-info");
 const levelsEl = document.getElementById("levels");
+const tabsEl = document.getElementById("tabs");
+
+const tabsArray = tabsEl.querySelectorAll('li');
 
 const levelBtns = document.querySelectorAll('.level-btn');
 
@@ -49,6 +52,20 @@ var cardsForLevels = [
     }
 ];
 
+// Tabs
+tabsArray.forEach(tab => {
+    tab.addEventListener('click', () => {
+        if(!tab.classList.contains('active')) {
+            console.log('tab');
+            tabsArray.forEach(tabEl => {
+                tabEl.classList.remove('active');
+            });
+            tab.classList.add('active');
+        }
+    })
+});
+
+// Level buttons
 var levelsNumber = cardsForLevels.length;
 
 levelBtns.forEach(levelBtn => {
@@ -194,7 +211,7 @@ class Table {
 
         containerEl.innerHTML = '';
         containerEl.appendChild(tbl);
-        
+
         // Create buttons.
         btnsContainer.innerHTML = '';
         // Back to menu button.
@@ -224,7 +241,7 @@ class Table {
         totalSeconds = 0;
         secondsLabel.innerHTML = pad(totalSeconds % 60);
         minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
-        
+
         this.timerInterval = setInterval(setTime, 1000);
 
         return cards;
@@ -320,6 +337,7 @@ class Table {
 function toggleMenuGame() {
     gameInfoEl.classList.toggle('active');
     levelsEl.classList.toggle('active');
+    tabsEl.classList.toggle('active');
 }
 
 function loadGame(numberOfCards, levelNumber) {
@@ -330,6 +348,7 @@ function loadGame(numberOfCards, levelNumber) {
     difficultyEl.innerText = `Level ${levelNumber}`;
     gameInfoEl.classList.add('active');
     levelsEl.classList.remove('active');
+    tabsEl.classList.remove('active');
 
     table = new Table(numberOfCards);
 
