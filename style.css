@@ -164,6 +164,14 @@ body {
 	margin-bottom: 3rem;
 }
 
+.tabs__body {
+	display: none;
+}
+
+.tabs__body.active {
+	display: block;
+}
+
 .level-btn {
 	display: flex;
 	align-items: center;

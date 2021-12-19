@@ -7,15 +7,34 @@ const gameInfoEl = document.getElementById("game-info");
 const levelsEl = document.getElementById("levels");
 const tabsEl = document.getElementById("tabs");
 
-const tabsArray = tabsEl.querySelectorAll('li');
+const tabsBtn = tabsEl.querySelectorAll('li');
+const tabsBtnArray = [...tabsBtn];
+const tabsItems = document.querySelectorAll('.levels');
 
 const levelBtns = document.querySelectorAll('.level-btn');
 
-const cardsImages = ['candle', 'candy-cane', 'packard-bell', 'chimney', 'christmas-ball', 'christmas-lights', 'christmas-tree', 'christmas-card', 'christmas-present', 'christmas-wreath', 'church', 'cocoa', 'cookie', 'elf', 'fireworks', 'fruit-cake', 'gingerbread-man', 'hat', 'holly', 'knitting', 'mulled-wine', 'nutcracker', 'reindeer', 'roast-chicken', 'santa-claus', 'sleigh', 'snowflake', 'snow-globe', 'snowman', 'star', 'stocking', 'christmas-ornament'];
+const christmasImages = ['candle', 'candy-cane', 'packard-bell', 'chimney', 'christmas-ball', 'christmas-lights', 'christmas-tree', 'christmas-card', 'christmas-present', 'christmas-wreath', 'church', 'cocoa', 'cookie', 'elf', 'fireworks', 'fruit-cake', 'gingerbread-man', 'hat', 'holly', 'knitting', 'mulled-wine', 'nutcracker', 'reindeer', 'roast-chicken', 'santa-claus', 'sleigh', 'snowflake', 'snow-globe', 'snowman', 'star', 'stocking', 'christmas-ornament'];
+const halloweenImages = ['bag', 'bat', 'bible', 'bones', 'broom', 'calendar', 'candles', 'candy', 'cat', 'coffin', 'devil', 'dracula', 'eye-ball', 'frankenstein', 'furnace', 'ghost', 'grave', 'grim-reaper', 'haunted-house', 'letter', 'mummy', 'pumkin', 'scythe', 'shirt', 'skull', 'spider', 'spider-web', 'tombstone', 'trick-or-treat_1', 'witch', 'witch-hat_1', 'zombie'];
+const musicImages = ['bag', 'bat', 'bible', 'bones', 'broom', 'calendar', 'candles', 'candy', 'cat', 'coffin', 'devil', 'dracula', 'eye-ball', 'frankenstein', 'furnace', 'ghost', 'grave', 'grim-reaper', 'haunted-house', 'letter', 'mummy', 'pumkin', 'scythe', 'shirt', 'skull', 'spider', 'spider-web', 'tombstone', 'trick-or-treat_1', 'witch', 'witch-hat_1', 'zombie'];
 
 var totalSeconds = 0;
 
-var table, cards, tbl, currentLevel;
+var table, cards, tbl, currentLevel, currentThemeIndex = 1;
+
+const themes = [
+    {
+        'imagesTheme': halloweenImages,
+        'imagesFolder': 'halloween'
+    },
+    {
+        'imagesTheme': christmasImages,
+        'imagesFolder': 'christmas'
+    },
+    {
+        'imagesTheme': musicImages,
+        'imagesFolder': 'music'
+    }
+];
 
 // Container for buttons.
 let btnsContainer = document.createElement('div');
@@ -53,17 +72,40 @@ var cardsForLevels = [
 ];
 
 // Tabs
-tabsArray.forEach(tab => {
-    tab.addEventListener('click', () => {
-        if(!tab.classList.contains('active')) {
-            console.log('tab');
-            tabsArray.forEach(tabEl => {
-                tabEl.classList.remove('active');
+tabsBtn.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        let currentBtn = tab;
+        let tabId = currentBtn.querySelector('a').getAttribute("href");
+        let currentTab = document.querySelector(tabId);
+
+        currentTheme = tabId;
+
+        if (!currentBtn.classList.contains('active')) {
+            currentThemeIndex = tabsBtnArray.indexOf(tab);
+            console.log(currentThemeIndex);
+
+            tabsBtn.forEach(item => {
+                item.classList.remove('active');
             });
-            tab.classList.add('active');
+
+            tabsItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            currentBtn.classList.add('active');
+            currentTab.classList.add('active');
         }
     })
 });
+
+// Make active second tab.
+if (tabsBtn[1]) {
+    tabsBtn[1].click();
+}
+else {
+    tabsBtn[0].click();
+}
 
 // Level buttons
 var levelsNumber = cardsForLevels.length;
@@ -131,8 +173,16 @@ function clearTable() {
     cards = [];
 }
 
-// Todo: add new image arrays for each theme.
-// Todo: make theme selecting tabs.
+// Image functions.
+function getImageUrl(image) {
+    return `url(img/${themes[currentThemeIndex].imagesFolder}/${image}.webp)`;
+}
+
+function shuffle(arr) {
+    return arr.map(i => [Math.random(), i]).sort().map(i => i[1]);
+}
+
+// Table class
 class Table {
     constructor(numberOfCards) {
         if (numberOfCards % 2 != 0) numberOfCards++;
@@ -247,23 +297,15 @@ class Table {
         return cards;
     }
 
-    getImageUrl(image) {
-        return `url(img/${image}.webp)`
-    }
-
-    shuffle(arr) {
-        return arr.map(i => [Math.random(), i]).sort().map(i => i[1]);
-    }
-
     addImages(cards) {
-        let shuffledCardsImages = this.shuffle(cardsImages);
+        let shuffledCardsImages = shuffle(themes[currentThemeIndex].imagesTheme);
         let copyCards = cards;
         for (let image = 0; image < this.numberOfCards / 2; image++) {
             const cardImage = shuffledCardsImages[image];
             for (let index = 0; index < 2; index++) {
                 let randomCard = copyCards[Math.floor(Math.random() * copyCards.length)];
                 copyCards = copyCards.filter(function (e) { return e !== randomCard })
-                randomCard.querySelector('.card__back').style.backgroundImage = this.getImageUrl(cardImage);
+                randomCard.querySelector('.card__back').style.backgroundImage = getImageUrl(cardImage);
             }
         }
     }
