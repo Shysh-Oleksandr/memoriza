@@ -207,15 +207,15 @@ btnsContainer.classList.add("btns-container");
 var cardsForLevels = [
     {
         "level": 1,
-        "numberOfCards": 4
+        "numberOfCards": 8
     },
     {
         "level": 2,
-        "numberOfCards": 6
+        "numberOfCards": 12
     },
     {
         "level": 3,
-        "numberOfCards": 8
+        "numberOfCards": 16
     },
     {
         "level": 4,
@@ -379,20 +379,20 @@ class Table {
             return;
         }
 
-        if (numberOfCells % 6 === 0) {
-            this.cols = 6;
-            this.rows = numberOfCells / this.cols;
-        }
-        else if (numberOfCells % 5 === 0) {
-            this.cols = 5;
-            this.rows = numberOfCells / this.cols;
-        }
-        else if (numberOfCells % 4 === 0) {
+        if (numberOfCells == 12) {
             this.cols = 4;
             this.rows = numberOfCells / this.cols;
         }
-        else if (numberOfCells % 3 === 0) {
-            this.cols = 3;
+        else if (numberOfCells == 24) {
+            this.cols = 6;
+            this.rows = numberOfCells / this.cols;
+        }
+        else if (numberOfCells == 8) {
+            this.cols = 4;
+            this.rows = numberOfCells / this.cols;
+        }
+        else if (numberOfCells == 54) {
+            this.cols = 9;
             this.rows = numberOfCells / this.cols;
         }
         else {
